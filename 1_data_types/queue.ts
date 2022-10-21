@@ -4,13 +4,13 @@ class Queue<T> {
   head: T | null = null;
   first: Node<T> | null = null;
   last: Node<T> | null = null;
-  listLength = 0;
+  length = 0;
 
-  push(...value: T[]) {
+  push(...value: T[]): number {
     value.forEach((item) => {
       const newNode = new Node(item);
 
-      this.listLength++;
+      this.length++;
 
       if (this.first === null || this.last === null) {
         this.first = newNode;
@@ -23,17 +23,17 @@ class Queue<T> {
         this.last.next = newNode;
         this.last = newNode;
       }
-
-      return newNode;
     });
+
+    return this.length;
   }
 
-  pop() {
-    const prevValue = this.head;
+  pop(): T {
+    const lastValue = this.head;
 
-    if (prevValue === null) throw Error('Exception! The array is empty.');
+    if (lastValue === null) throw Error('Exception! The array is empty.');
 
-    this.listLength--;
+    this.length--;
 
     if (this.first !== null && this.first.next !== null) {
       this.first = this.first.next;
@@ -45,7 +45,7 @@ class Queue<T> {
       this.head = null;
     }
 
-    return prevValue;
+    return lastValue;
   }
 }
 

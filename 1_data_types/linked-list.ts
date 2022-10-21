@@ -1,39 +1,49 @@
 import Node from './node';
 
+type IteratorResult<T> = {
+  done: boolean;
+  value: T | undefined;
+}
+type IterableIterator<T> = {
+  [Symbol.iterator](): IterableIterator<T>;
+  next(): IteratorResult<T>
+};
+
 class LinkedList<T> {
   first: Node<T> | null = null;
   last: Node<T> | null = null;
-    listLength = 0;
+  length = 0;
 
-  add(value: T) {
-    let newNode;
+  add(value: T): number {
+    const newNode = new Node(value);
 
-    this.listLength += 1;
+    this.length += 1;
 
     if (this.first === null || this.last === null) {
-      newNode = new Node(value);
       this.first = newNode;
       this.last = newNode;
-      return newNode;
     }
 
-    newNode = new Node(value);
     newNode.next = null;
     newNode.prev = this.last;
 
     this.last.next = newNode;
     this.last = newNode;
 
-    return newNode;
+    return this.length;
   }
 
-  [Symbol.iterator]() {
+  values(): IterableIterator<T> {
     let current = this.first;
     let iteration = 0;
-    const listLength = this.listLength;
+    const listLength = this.length;
 
     return {
-      next() {
+      [Symbol.iterator]() {
+        return this;
+      },
+
+      next(): IteratorResult<T> {
         const value = current?.value;
         const done = iteration++ >= listLength;
 
@@ -53,6 +63,35 @@ class LinkedList<T> {
       }
     };
   }
+
+  [Symbol.iterator](): IterableIterator<T> {
+    return this.values();
+  }
+
+  reverse(): IterableIterator<T> {
+    let current = this.last;
+    let iteration = this.length;
+
+    return {
+      [Symbol.iterator]() {
+        return this
+      },
+
+      next(): IteratorResult<T> {
+        const value = current?.value;
+        const done = iteration === 0;
+
+        iteration--;
+
+        if (current) current = current.prev;
+
+        return {
+          done,
+          value
+        }
+      }
+    }
+  }
 }
 
 const list = new LinkedList();
@@ -65,8 +104,10 @@ console.log(list?.first?.value);
 console.log(list?.last?.value);
 console.log(list?.first?.next?.value);
 console.log(list?.first?.next?.prev?.value);
-console.log(list.listLength);
+console.log(list.length);
 
 for (const item of list) {
   console.log("item", item);
 }
+
+console.log(...list.reverse());

@@ -3,12 +3,12 @@ import Node from './node';
 class Deque<T> {
   first: Node<T> | null = null;
   last: Node<T> | null = null;
-  listLength = 0;
+  length = 0;
 
-  push(value: T) {
+  push(value: T): number {
     const newNode = new Node(value);
 
-    this.listLength++;
+    this.length++;
 
     if (this.first === null || this.last === null) {
       this.first = newNode;
@@ -19,13 +19,13 @@ class Deque<T> {
       this.last = newNode;
     }
 
-    return newNode;
+    return this.length;
   }
 
-  unshift(value: T) {
+  unshift(value: T): number {
     const newNode = new Node(value);
 
-    this.listLength++;
+    this.length++;
 
     if (this.first === null) {
       this.first = newNode;
@@ -36,13 +36,13 @@ class Deque<T> {
       this.first = newNode;
     }
 
-    return newNode;
+    return this.length;
   }
 
-  pop() {
-    if (this.listLength === 0) throw Error('Exception! The array is empty.');
+  pop(): Node<T> | null {
+    if (this.length === 0) throw Error('Exception! The array is empty.');
 
-    this.listLength--;
+    this.length--;
 
     const last = this.last;
 
@@ -59,10 +59,10 @@ class Deque<T> {
     return last;
   }
 
-  shift() {
-    if (this.listLength === 0) throw Error('Exception! The array is empty.');
+  shift(): Node<T> | null {
+    if (this.length === 0) throw Error('Exception! The array is empty.');
 
-    this.listLength--;
+    this.length--;
 
     const first = this.first;
 

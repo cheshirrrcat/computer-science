@@ -1,20 +1,58 @@
+function StructureViaFunction(scheme: string[]) {
+  const data = new Array(scheme.length);
+  const index = new Array(...scheme);
+
+  const res: {
+    set: (key: string, value: unknown) => void,
+    get: (value: string) => string,
+  } = {
+    set(key, value) {
+      data[index.indexOf(key)] = value;
+    },
+    get(key) {
+      return data[index.indexOf(key)];
+    },
+  };
+
+  return res;
+}
+
+const blackJack = StructureViaFunction(['name', 'lastName', 'age']);
+
+blackJack.set('name', 'Black');
+blackJack.set('lastName', 'Jack');
+blackJack.set('age', 53);
+console.log(blackJack.get('name')); // 'Black'
+console.log(blackJack.get('lastName')); // 'Jack'
+console.log(blackJack.get('age')); // 53
+
+
 class Structure {
-  struct: Record<string, unknown> = {};
+  struct: unknown[];
+  getIndex: Function;
 
-  constructor(keys: string[]) {
-    if (keys.length === 0) throw Error('Error. You need to add array of keys.');
+  constructor(scheme: string[]) {
+    this.struct = new Array(scheme.length);
+    this.getIndex = this.generateFunction(scheme);
+  }
 
-    keys.forEach((key) => {
-      this.struct[key] = null;
-    })
+  generateFunction(scheme: string[]): Function {
+    const getKeyIndex = `
+      switch(key) {
+        ${scheme.reduce((acc, key, i) => acc + `case '${key}': return ${i};`, '')}
+        default: break;
+      }
+    `;
+
+    return new Function('key', getKeyIndex);
   }
 
   set(key: string, value: unknown) {
-    this.struct[key] = value;
+    this.struct[this.getIndex(key)] = value;
   }
 
   get(key: string) {
-    return this.struct[key];
+    return this.struct[this.getIndex(key)];
   }
 }
 
@@ -24,6 +62,4 @@ jackBlack.set('name', 'Jack');
 jackBlack.set('lastName', 'Black');
 jackBlack.set('age', 53);
 // console.log(jackBlack);
-jackBlack.get('name') // 'Jack'
-
-
+console.log(jackBlack.get('name')); // 'Jack'

@@ -1,34 +1,34 @@
 class Stack<T> {
   public head: T | null = null;
-  private limit: number;
+  readonly limit: number;
   readonly stack: T[];
-  private stackLength = 0;
+  private length = 0;
 
   constructor(limit: number) {
     this.limit = limit;
     this.stack = new Array(limit);
   }
 
-  push(value: T) {
-    if (this.stackLength === this.limit) throw Error('Exception! Array limit reached.');
+  push(value: T): number {
+    if (this.length === this.limit) throw Error('Exception! Array limit reached.');
 
-    this.stack[this.stackLength] = value;
+    this.stack[this.length] = value;
     this.head = value;
 
-    this.stackLength++;
+    this.length++;
 
-    return this.stack;
+    return this.length;
   }
 
-  pop() {
-    if (this.stackLength === 0) throw Error('Exception! The array is empty.');
+  pop(): T {
+    if (this.length === 0) throw Error('Exception! The array is empty.');
 
-    this.stackLength--;
+    this.length--;
 
-    const currentItem = this.stack[this.stackLength];
+    const currentItem = this.stack[this.length];
 
-    delete this.stack[this.stackLength];
-    this.head = this.stack[this.stackLength - 1];
+    delete this.stack[this.length];
+    this.head = this.stack[this.length - 1];
 
     return currentItem;
   }
