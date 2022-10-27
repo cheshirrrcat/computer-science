@@ -9,12 +9,12 @@ type IterableIterator<T> = {
   next(): IteratorResult<T>
 };
 
-class LinkedList<T> {
+export class LinkedList<T> {
   first: Node<T> | null = null;
   last: Node<T> | null = null;
   length = 0;
 
-  add(value: T): number {
+  add(value: T) {
     const newNode = new Node(value);
 
     this.length += 1;
@@ -29,8 +29,6 @@ class LinkedList<T> {
 
     this.last.next = newNode;
     this.last = newNode;
-
-    return this.length;
   }
 
   values(): IterableIterator<T> {
@@ -94,20 +92,20 @@ class LinkedList<T> {
   }
 }
 
-const list = new LinkedList();
-
-list.add(1);
-list.add(2);
-list.add(3);
-
-console.log(list?.first?.value);
-console.log(list?.last?.value);
-console.log(list?.first?.next?.value);
-console.log(list?.first?.next?.prev?.value);
-console.log(list.length);
-
-for (const item of list) {
-  console.log("item", item);
-}
-
-console.log(...list.reverse());
+// const list = new LinkedList();
+//
+// list.add(1);
+// list.add(2);
+// list.add(3);
+//
+// console.log(list?.first?.value);
+// console.log(list?.last?.value);
+// console.log(list?.first?.next?.value);
+// console.log(list?.first?.next?.prev?.value);
+// console.log(list.length);
+//
+// for (const item of list) {
+//   console.log("item", item);
+// }
+//
+// console.log(...list.reverse());
